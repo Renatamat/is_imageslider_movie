@@ -20,27 +20,36 @@ class AdminBesmartVideoSliderController extends ModuleAdminController
         $this->position = true;
         $this->_defaultOrderBy = 'position';
         $this->_orderWay = 'ASC';
+
+        // Ensure module instance exists before using l() which requires $this->module->name
+        if ($this->module === null) {
+            $this->module = Module::getInstanceByName('besmartvideoslider');
+        }
+
+        // Ensure translator is available before using $this->l() on PrestaShop 8+
+        $this->translator = Context::getContext()->getTranslator();
         $this->fields_list = [
             'id_slide' => [
                 'title' => $this->l('ID'),
                 'align' => 'center',
+                'filter_key' => 'a!id_slide',
                 'class' => 'fixed-width-xs',
             ],
             'button_label' => [
                 'title' => $this->l('Button label'),
-                'filter_key' => 'sl!button_label',
+                'filter_key' => 'b!button_label',
             ],
             'desktop_video' => [
                 'title' => $this->l('Desktop video'),
-                'filter_key' => 'sl!desktop_video',
+                'filter_key' => 'b!desktop_video',
             ],
             'mobile_video' => [
                 'title' => $this->l('Mobile video'),
-                'filter_key' => 'sl!mobile_video',
+                'filter_key' => 'b!mobile_video',
             ],
             'position' => [
                 'title' => $this->l('Position'),
-                'filter_key' => 's!position',
+                'filter_key' => 'a!position',
                 'position' => true,
                 'align' => 'center',
             ],
@@ -82,8 +91,9 @@ class AdminBesmartVideoSliderController extends ModuleAdminController
 
     public function renderList()
     {
-        $this->_select = 'sl.`button_label`, sl.`desktop_video`, sl.`mobile_video`';
-        $this->_join = ' LEFT JOIN `' . _DB_PREFIX_ . 'besmartvideoslider_slides_lang` sl ON (sl.`id_slide` = a.`id_slide` AND sl.`id_lang` = ' . (int) $this->context->language->id . ')';
+        $this->_select = 'a.`id_slide`, b.`button_label`, b.`desktop_video`, b.`mobile_video`';
+        $this->_orderBy = 'a.position';
+        $this->_group = 'a.id_slide';
 
         $this->addRowAction('edit');
         $this->addRowAction('delete');
