@@ -21,6 +21,11 @@ class AdminBesmartVideoSliderController extends ModuleAdminController
         $this->_defaultOrderBy = 'position';
         $this->_orderWay = 'ASC';
 
+        // Ensure module instance exists before using l() which requires $this->module->name
+        if ($this->module === null) {
+            $this->module = Module::getInstanceByName('besmartvideoslider');
+        }
+
         // Ensure translator is available before using $this->l() on PrestaShop 8+
         $this->translator = Context::getContext()->getTranslator();
         $this->fields_list = [
