@@ -49,7 +49,7 @@ class AdminBesmartVideoSliderController extends ModuleAdminController
             ],
             'position' => [
                 'title' => $this->l('Position'),
-                'filter_key' => 's!position',
+                'filter_key' => 'a!position',
                 'position' => true,
                 'align' => 'center',
             ],
@@ -92,8 +92,8 @@ class AdminBesmartVideoSliderController extends ModuleAdminController
     public function renderList()
     {
         $this->_select = 'a.`id_slide`, b.`button_label`, b.`desktop_video`, b.`mobile_video`';
-        $this->_orderBy = 'a.`position`';
-        $this->_group = 'a.`id_slide`';
+        $this->_orderBy = 'a.position';
+        $this->_group = 'a.id_slide';
 
         $this->addRowAction('edit');
         $this->addRowAction('delete');
