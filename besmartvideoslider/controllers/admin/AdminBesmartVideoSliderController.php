@@ -91,9 +91,10 @@ class AdminBesmartVideoSliderController extends ModuleAdminController
 
     public function renderList()
     {
-        $this->_select = 'a.`id_slide`, b.`button_label`, b.`desktop_video`, b.`mobile_video`';
-        $this->_orderBy = 'a.position';
-        $this->_group = 'a.id_slide';
+        // Use the default language join added when $this->lang = true to avoid duplicate aliases
+        $this->_select = 'b.`button_label`, b.`desktop_video`, b.`mobile_video`';
+        $this->_orderBy = 'a.`position`';
+        $this->_group = '';
 
         $this->addRowAction('edit');
         $this->addRowAction('delete');
@@ -198,7 +199,7 @@ class AdminBesmartVideoSliderController extends ModuleAdminController
         die(true);
     }
 
-    protected function processDelete()
+    public function processDelete()
     {
         $this->deleteSlideFiles((int) Tools::getValue($this->identifier));
         $result = parent::processDelete();
@@ -207,7 +208,7 @@ class AdminBesmartVideoSliderController extends ModuleAdminController
         return $result;
     }
 
-    protected function processBulkDelete()
+    public function processBulkDelete()
     {
         $selected = Tools::getValue($this->table . 'Box');
         if (is_array($selected)) {
