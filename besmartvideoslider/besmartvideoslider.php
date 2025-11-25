@@ -32,6 +32,7 @@ class Besmartvideoslider extends Module
             && $this->registerHook('displayHome')
             && $this->registerHook('actionFrontControllerSetMedia')
             && $this->registerHook('actionAdminControllerSetMedia')
+            && $this->installTab()
             && $this->createTables()
             && $this->createVideoDirectory();
     }
@@ -39,6 +40,7 @@ class Besmartvideoslider extends Module
     public function uninstall()
     {
         return $this->removeTables()
+            && $this->uninstallTab()
             && Configuration::deleteByName('BESMARTVIDEOSLIDER_ENABLED')
             && parent::uninstall();
     }
@@ -216,6 +218,38 @@ class Besmartvideoslider extends Module
         }
 
         return true;
+    }
+
+    private function installTab(): bool
+    {
+        $parentId = (int) Tab::getIdFromClassName('IMPROVE');
+        if (!$parentId) {
+            $parentId = (int) Tab::getIdFromClassName('AdminParentModulesSf');
+        }
+
+        $tab = new Tab();
+        $tab->class_name = 'AdminBesmartVideoSlider';
+        $tab->id_parent = $parentId;
+        $tab->module = $this->name;
+        $tab->active = 1;
+
+        foreach (Language::getLanguages(true) as $lang) {
+            $tab->name[$lang['id_lang']] = $this->l('Video Slider');
+        }
+
+        return (bool) $tab->add();
+    }
+
+    private function uninstallTab(): bool
+    {
+        $idTab = (int) Tab::getIdFromClassName('AdminBesmartVideoSlider');
+        if (!$idTab) {
+            return true;
+        }
+
+        $tab = new Tab($idTab);
+
+        return (bool) $tab->delete();
     }
 
     private function getAdminLink()
