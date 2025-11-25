@@ -20,6 +20,9 @@ class AdminBesmartVideoSliderController extends ModuleAdminController
         $this->position = true;
         $this->_defaultOrderBy = 'position';
         $this->_orderWay = 'ASC';
+
+        // Ensure translator is available before using $this->l() on PrestaShop 8+
+        $this->translator = Context::getContext()->getTranslator();
         $this->fields_list = [
             'id_slide' => [
                 'title' => $this->l('ID'),
