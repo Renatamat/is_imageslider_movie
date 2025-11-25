@@ -7,6 +7,7 @@
           <div class="besmartvideoslider__video-wrapper">
             <video class="besmartvideoslider__video"
               muted
+              autoplay
               loop
               playsinline
               preload="metadata"
