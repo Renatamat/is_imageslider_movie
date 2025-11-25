@@ -91,10 +91,10 @@ class AdminBesmartVideoSliderController extends ModuleAdminController
 
     public function renderList()
     {
-        $this->_select = 'a.`id_slide`, b.`button_label`, b.`desktop_video`, b.`mobile_video`';
-        $this->_join = 'LEFT JOIN `' . _DB_PREFIX_ . 'besmartvideoslider_slides_lang` b ON (a.`id_slide` = b.`id_slide` AND b.`id_lang` = ' . (int) $this->context->language->id . ')';
-        $this->_orderBy = 'a.position';
-        $this->_group = 'GROUP BY a.`id_slide`';
+        // Use the default language join added when $this->lang = true to avoid duplicate aliases
+        $this->_select = 'b.`button_label`, b.`desktop_video`, b.`mobile_video`';
+        $this->_orderBy = 'a.`position`';
+        $this->_group = '';
 
         $this->addRowAction('edit');
         $this->addRowAction('delete');
